@@ -1,0 +1,32 @@
+package andres.rangel.compilerxd.data.model
+
+enum class TokenType {
+    ASSIGN,
+    COMMA,
+    END_OF_FUNCTION,
+    EQUALS,
+    NOT_EQUALS,
+    FUNCTION,
+    IDENTIFIER,
+    IF,
+    ELSE,
+    RETURN,
+    TRUE,
+    FALSE,
+    ILLEGAL,
+    INTEGER,
+    STRING,
+    LEFT_BRACE,
+    VAR,
+    LEFT_PAREN,
+    PLUS,
+    MINUS,
+    DIVISION,
+    MULTIPLICATION,
+    LESS_THAN,
+    GREATER_THAN,
+    RIGHT_BRACE,
+    RIGHT_PAREN,
+    SEMI_COLON,
+    NEGATION
+}

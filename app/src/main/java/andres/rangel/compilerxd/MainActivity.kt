@@ -1,6 +1,6 @@
 package andres.rangel.compilerxd
 
-import andres.rangel.compilerxd.ui.screens.AppBottomNavigation
+import andres.rangel.compilerxd.ui.components.AppBottomNavigation
 import andres.rangel.compilerxd.ui.theme.CompilerXDTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity

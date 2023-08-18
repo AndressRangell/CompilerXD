@@ -1,8 +1,11 @@
 package andres.rangel.compilerxd.ui.screens
 
+import andres.rangel.compilerxd.data.model.Screen
+import andres.rangel.compilerxd.utils.Lexer
+import andres.rangel.compilerxd.utils.Token
+import andres.rangel.compilerxd.utils.Token.Companion.SOURCE_CODE
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
@@ -12,11 +15,11 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,41 +27,37 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import compilerTools.Functions
+import androidx.navigation.NavHostController
 
 @Composable
-fun SourceCodeFragment() {
+fun SourceCodeFragment(navController: NavHostController) {
+    val textState = rememberSaveable { mutableStateOf(SOURCE_CODE) }
+
     Column {
         TopAppBar(
-            title = { Text(text = "Nombre del Archivo") },
+            title = { Text(text = "CompilerXD") },
             actions = {
-                IconButton(onClick = { /* Acción de configuración */ }) {
-                    Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings")
+                IconButton(onClick = {
+                    performPlayAction(textState.value)
+                    navController.navigate(Screen.OutputScreen.route)
+                }) {
+                    Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Play")
                 }
             }
         )
-        CodeEditor()
-    }
-}
-
-@Composable
-fun CodeEditor() {
-    var text by remember { mutableStateOf("") }
-    Row(
-        modifier = Modifier.padding(0.dp, 5.dp)
-    ) {
-        LineNumberedTextField(text = text) {
-            text = it
+        CodeEditor(textState.value) { newText ->
+            textState.value = newText
+            SOURCE_CODE = newText
         }
     }
 }
 
 @Composable
-fun LineNumberedTextField(
+fun CodeEditor(
     text: String,
     onTextChanged: (String) -> Unit
 ) {
-    var lines by remember(text) { mutableStateOf(text.lines()) }
+    var lines by rememberSaveable { mutableStateOf(text.lines()) }
 
     Box {
         BasicTextField(
@@ -79,6 +78,15 @@ fun LineNumberedTextField(
                 .padding(start = 32.dp)
         )
         LineNumbers(lines.size)
+    }
+}
+
+fun performPlayAction(code: String) {
+    val lexer = Lexer(code)
+    while (true) {
+        val token = lexer.nextToken()
+        if (token == Token.END_OF_FUNCTION) break
+        Token.TOKEN_LIST.add(token)
     }
 }
 

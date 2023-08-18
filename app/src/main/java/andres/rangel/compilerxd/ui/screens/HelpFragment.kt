@@ -20,7 +20,7 @@ fun HelpFragment() {
         )
 
         Text(
-            text = "Aquí puedes agregar una descripción de cómo usar la aplicación.",
+            text = "Here you can add a description of how to use the application.",
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
