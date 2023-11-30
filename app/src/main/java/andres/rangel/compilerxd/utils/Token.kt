@@ -6,9 +6,11 @@ data class Token(val tokenType: TokenType, val literal: String) {
     override fun toString(): String {
         return "Type: $tokenType, Literal: $literal"
     }
+
     companion object {
-        val END_OF_FUNCTION = Token(TokenType.END_OF_FUNCTION, "")
         val TOKEN_LIST = arrayListOf<Token>()
+        val ERROR_LIST = arrayListOf<String>()
+        var OUTPUT = ""
         var SOURCE_CODE = ""
     }
 }

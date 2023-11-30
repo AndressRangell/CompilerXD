@@ -37,7 +37,12 @@ fun TokensFragment() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(
+                    top = 16.dp,
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 60.dp
+                )
         ) {
             items(TOKEN_LIST.size) { index ->
                 val token = TOKEN_LIST[index]

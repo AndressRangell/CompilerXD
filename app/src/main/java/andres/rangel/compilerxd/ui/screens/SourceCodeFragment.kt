@@ -1,9 +1,15 @@
 package andres.rangel.compilerxd.ui.screens
 
 import andres.rangel.compilerxd.data.model.Screen
+import andres.rangel.compilerxd.utils.Evaluator
 import andres.rangel.compilerxd.utils.Lexer
+import andres.rangel.compilerxd.utils.ObjectEnvironment
+import andres.rangel.compilerxd.utils.Parser
 import andres.rangel.compilerxd.utils.Token
+import andres.rangel.compilerxd.utils.Token.Companion.ERROR_LIST
+import andres.rangel.compilerxd.utils.Token.Companion.OUTPUT
 import andres.rangel.compilerxd.utils.Token.Companion.SOURCE_CODE
+import andres.rangel.compilerxd.utils.Token.Companion.TOKEN_LIST
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,8 +44,11 @@ fun SourceCodeFragment(navController: NavHostController) {
             title = { Text(text = "CompilerXD") },
             actions = {
                 IconButton(onClick = {
+                    TOKEN_LIST.clear()
+                    ERROR_LIST.clear()
+                    OUTPUT = "Build successful"
                     performPlayAction(textState.value)
-                    navController.navigate(Screen.OutputScreen.route)
+                    navController.navigate(Screen.TokensScreen.route)
                 }) {
                     Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Play")
                 }
@@ -83,10 +92,16 @@ fun CodeEditor(
 
 fun performPlayAction(code: String) {
     val lexer = Lexer(code)
-    while (true) {
-        val token = lexer.nextToken()
-        if (token == Token.END_OF_FUNCTION) break
-        Token.TOKEN_LIST.add(token)
+    val parser = Parser(lexer)
+    val program = parser.parseProgram()
+    val environment = ObjectEnvironment()
+    TOKEN_LIST.removeLast()
+    if (parser.errorsList.isNotEmpty()) {
+        ERROR_LIST.addAll(parser.errorsList)
+    }
+    val evaluated = Evaluator().evaluate(program, environment)
+    if (evaluated != null) {
+        OUTPUT = evaluated.inspect()
     }
 }
 

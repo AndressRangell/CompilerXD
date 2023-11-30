@@ -2,11 +2,12 @@ package andres.rangel.compilerxd.ui.components
 
 import andres.rangel.compilerxd.R
 import andres.rangel.compilerxd.data.model.Screen
-import andres.rangel.compilerxd.ui.screens.HelpFragment
 import andres.rangel.compilerxd.ui.screens.OutputFragment
 import andres.rangel.compilerxd.ui.screens.SourceCodeFragment
+import andres.rangel.compilerxd.ui.screens.SyntaxFragment
 import andres.rangel.compilerxd.ui.screens.TokensFragment
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ExperimentalMaterialApi
@@ -14,8 +15,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -47,19 +51,6 @@ fun AppBottomNavigation() {
                     label = { Text("Source code") }
                 )
                 BottomNavigationItem(
-                    selected = currentScreen == Screen.OutputScreen.route,
-                    onClick = {
-                        navController.navigate(Screen.OutputScreen.route)
-                    },
-                    icon = {
-                        Icon(
-                            ImageVector.vectorResource(id = R.drawable.icon_output),
-                            contentDescription = "Output Fragment"
-                        )
-                    },
-                    label = { Text("Output") }
-                )
-                BottomNavigationItem(
                     selected = currentScreen == Screen.TokensScreen.route,
                     onClick = {
                         navController.navigate(Screen.TokensScreen.route)
@@ -73,26 +64,40 @@ fun AppBottomNavigation() {
                     label = { Text("Tokens") }
                 )
                 BottomNavigationItem(
-                    selected = currentScreen == Screen.HelpScreen.route,
+                    selected = currentScreen == Screen.SyntaxScreen.route,
                     onClick = {
-                        navController.navigate(Screen.HelpScreen.route)
+                        navController.navigate(Screen.SyntaxScreen.route)
                     },
                     icon = {
                         Icon(
-                            ImageVector.vectorResource(id = R.drawable.icon_help),
-                            contentDescription = "Help Fragment"
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.sintaxis),
+                            contentDescription = "Syntax Fragment"
                         )
                     },
-                    label = { Text("Help") }
+                    label = { Text("Syntax") }
+                )
+                BottomNavigationItem(
+                    selected = currentScreen == Screen.OutputScreen.route,
+                    onClick = {
+                        navController.navigate(Screen.OutputScreen.route)
+                    },
+                    icon = {
+                        Icon(
+                            ImageVector.vectorResource(id = R.drawable.icon_output),
+                            contentDescription = "Output Fragment"
+                        )
+                    },
+                    label = { Text("Output") }
                 )
             }
         }
     ) {
         NavHost(navController = navController, startDestination = Screen.SourceCodeScreen.route) {
             composable(Screen.SourceCodeScreen.route) { SourceCodeFragment(navController) }
-            composable(Screen.OutputScreen.route) { OutputFragment() }
             composable(Screen.TokensScreen.route) { TokensFragment() }
-            composable(Screen.HelpScreen.route) { HelpFragment() }
+            composable(Screen.SyntaxScreen.route) { SyntaxFragment() }
+            composable(Screen.OutputScreen.route) { OutputFragment() }
         }
     }
 }

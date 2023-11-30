@@ -89,7 +89,6 @@ class Lexer(private var source: String) {
                 token = Token(TokenType.ILLEGAL, character)
             }
         }
-
         readCharacter()
         return token
     }
